@@ -12,12 +12,23 @@ app = FastAPI(title="DeepPavlov NER RU")
 class Req(BaseModel):
     text: str
 
-# Берём стандартный конфиг и указываем путь к локальным файлам модели
-cfg = parse_config(configs.ner.ner_rus_bert)
-cfg["metadata"]["variables"]["NER_PATH"] = str(MODEL_DIR)
+_ner=None
 
-# ВАЖНО: если у тебя ещё не скачаны BERT/токенизатор — DeepPavlov докачает их при первом запуске
-ner = build_model(cfg, download=True)
+def get_ner():
+	global _ner
+	if _ner is None:
+
+		# Берём стандартный конфиг и указываем путь к локальным файлам модели
+		cfg = parse_config(configs.ner.ner_rus_bert)
+		cfg["metadata"]["variables"]["NER_PATH"] = str(MODEL_DIR)	
+		# ВАЖНО: если у тебя ещё не скачаны BERT/токенизатор — DeepPavlov докачает их при первом запуске
+		ner = build_model(cfg, download=True)
+	return _ner
+
+@app.get("/health")
+def health():
+	return {"status":"ok"}
+
 
 @app.post("/ner")
 def ner_endpoint(req: Req):
