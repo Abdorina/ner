@@ -22,7 +22,7 @@ def get_ner():
 		cfg = parse_config(configs.ner.ner_rus_bert)
 		cfg["metadata"]["variables"]["NER_PATH"] = str(MODEL_DIR)	
 		# ВАЖНО: если у тебя ещё не скачаны BERT/токенизатор — DeepPavlov докачает их при первом запуске
-		ner = build_model(cfg, download=True)
+		ner = build_model(cfg, download=False)
 	return _ner
 
 @app.get("/health")
@@ -32,9 +32,14 @@ def health():
 
 @app.post("/ner")
 def ner_endpoint(req: Req):
-    res = ner([req.text])
+	model = get_ner()
+	res =model([req.text])
+    return {"result": res if isinstance(res, (list, dict, str, int, float, bool)) else str(res)}
 
 @app.get("/readyz")
 def readyz():
-    return {"model_loaded": model is not None}	
-    return {"result": res}
+	try:
+        get_ner()
+        return {"ok": True, "model_loaded": True}
+    except Exception as e:
+        return {"ok": False, "model_loaded": False, "error": f"{type(e).__name__}: {e}"}    return {"result": res}
