@@ -47,15 +47,15 @@ def readyz():
             "error": f"{type(e).__name__}: {e}"
         }
 
-
 @app.post("/ner")
 def ner_endpoint(req: Req):
     model = get_ner()
-    res = model([req.text])
-    return {
-        "result": res if isinstance(
-            res, (list, dict, str, int, float, bool)
-        ) else str(res)
+    try:
+        res = model([req.text])
+        return JSONResponse(content={"result": jsonable_encoder(res)})
+    except Exception as e:
+        log.exception("NER failed")
+        raise
 
 import logging
 from fastapi import Request
