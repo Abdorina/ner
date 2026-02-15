@@ -18,16 +18,30 @@ class Req(BaseModel):
 
 
 _ner = None
+_model_loading = False
+_model_error = None
 
 
 def get_ner():
-    """Lazy-load DeepPavlov NER model on first request."""
-    global _ner
-    if _ner is None:
+    global _ner, _model_loading, _model_error
+    if _ner is not None:
+        return _ner
+    if _model_loading:
+        raise RuntimeError("model is loading")
+
+    _model_loading = True
+    try:
         cfg = parse_config(configs.ner.ner_rus_bert)
         cfg["metadata"]["variables"]["NER_PATH"] = str(MODEL_DIR)
-        _ner = build_model(cfg, download=True)
-    return _ner
+        _ner = build_model(cfg, download=True)  # или False, если модель точно локально полная
+        _model_error = None
+        return _ner
+    except Exception as e:
+        _model_error = f"{type(e).__name__}: {e}"
+        raise
+    finally:
+        _model_loading = False
+
 
 
 @app.get("/health")
@@ -37,15 +51,13 @@ def health():
 
 @app.get("/readyz")
 def readyz():
-    try:
-        get_ner()
-        return {"ok": True, "model_loaded": True}
-    except Exception as e:
-        return {
-            "ok": False,
-            "model_loaded": False,
-            "error": f"{type(e).__name__}: {e}"
-        }
+    return {
+        "ok": _ner is not None,
+        "model_loaded": _ner is not None,
+        "loading": _model_loading,
+        "error": _model_error,
+    }
+
 
 @app.post("/ner")
 def ner_endpoint(req: Req):
