@@ -26,7 +26,7 @@ def get_ner():
     if _ner is None:
         cfg = parse_config(configs.ner.ner_rus_bert)
         cfg["metadata"]["variables"]["NER_PATH"] = str(MODEL_DIR)
-        _ner = build_model(cfg, download=False)
+        _ner = build_model(cfg, download=True)
     return _ner
 
 
