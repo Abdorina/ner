@@ -93,3 +93,12 @@ def test_ru():
     model = get_ner()
     res = model(["Яна"])
     return JSONResponse(content={"result": jsonable_encoder(res)})
+
+@app.get("/model_files")
+def model_files():
+    if not MODEL_DIR.exists():
+        return {"exists": False, "dir": str(MODEL_DIR), "count": 0, "files": []}
+
+    files = sorted([str(p.relative_to(MODEL_DIR)) for p in MODEL_DIR.rglob("*") if p.is_file()])
+    return {"exists": True, "dir": str(MODEL_DIR), "count": len(files), "files": files}
+
