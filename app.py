@@ -29,12 +29,15 @@ def get_ner():
 def health():
 	return {"status":"ok"}
 
-
 @app.post("/ner")
 def ner_endpoint(req: Req):
-	model = get_ner()
-	res =model([req.text])
-    return {"result": res if isinstance(res, (list, dict, str, int, float, bool)) else str(res)}
+    model = get_ner()
+    res = model([req.text])
+    return {
+        "result": res if isinstance(
+            res, (list, dict, str, int, float, bool)
+        ) else str(res)
+    }
 
 @app.get("/readyz")
 def readyz():
