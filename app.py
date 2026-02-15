@@ -91,5 +91,5 @@ def ner_endpoint(req: Req):
 @app.get("/test_ru")
 def test_ru():
     model = get_ner()
-    res = model(["Привет, меня зовут Яна. Я живу в Москве"])
+    res = model(["Яна"])
     return JSONResponse(content={"result": jsonable_encoder(res)})
