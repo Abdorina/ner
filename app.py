@@ -56,4 +56,20 @@ def ner_endpoint(req: Req):
         "result": res if isinstance(
             res, (list, dict, str, int, float, bool)
         ) else str(res)
+
+import logging
+from fastapi import Request
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
+
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger("app")
+
+@app.exception_handler(Exception)
+async def unhandled(request: Request, exc: Exception):
+    log.exception("ERROR %s %s", request.method, request.url.path)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "internal error", "type": exc.__class__.__name__, "msg": str(exc)},
+    )
     }
