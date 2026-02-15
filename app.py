@@ -72,4 +72,3 @@ async def unhandled(request: Request, exc: Exception):
         status_code=500,
         content={"detail": "internal error", "type": exc.__class__.__name__, "msg": str(exc)},
     )
-    }
