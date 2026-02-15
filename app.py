@@ -33,4 +33,8 @@ def health():
 @app.post("/ner")
 def ner_endpoint(req: Req):
     res = ner([req.text])
+
+@app.get("/readyz")
+def readyz():
+    return {"model_loaded": model is not None}	
     return {"result": res}
