@@ -52,13 +52,18 @@ git lfs pull
 # --------------------------------------------------
 # 5) Unpack model
 # --------------------------------------------------
-MODEL_DIR="models/ner_rus_bert_coll3_torch"
-mkdir -p "$MODEL_DIR"
+# 5) Restore offline caches (DeepPavlov + HuggingFace)
+echo "📦 Restoring offline caches..."
 
-if [ ! -f "$MODEL_DIR/model.pth.tar" ]; then
-  echo "🗜 Extracting model..."
-  tar -xf ner_rus_bert_coll3_torch.tar -C "$MODEL_DIR"
-fi
+# DeepPavlov cache (~/.deeppavlov)
+tar -xzf deeppavlov_cache.tar.gz -C "$HOME"
+
+# HuggingFace cache
+mkdir -p "$HOME/.cache/huggingface/hub"
+tar -xzf hf_rubert_only.tar.gz -C "$HOME/.cache/huggingface/hub"
+
+export HF_HOME="$HOME/.cache/huggingface"
+export TRANSFORMERS_CACHE="$HOME/.cache/huggingface"
 
 # --------------------------------------------------
 # 6) Install LIGHT dependencies (CPU ONLY)
