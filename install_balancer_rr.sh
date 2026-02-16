@@ -42,6 +42,10 @@ upstream ner_upstream {
 $(printf "${UPSTREAM_BLOCK}")
 }
 
+location = /nginx_health {
+    return 200 "nginx ok\n";
+}
+
 server {
     listen ${LB_PORT};
 
