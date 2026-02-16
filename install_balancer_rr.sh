@@ -3,7 +3,7 @@ set -euo pipefail
 
 # ====== НАСТРОЙКИ ======
 # Список NER-нод через пробел (round-robin по умолчанию)
-NER_UPSTREAMS="${NER_UPSTREAMS:-10.20.14.57:8000}"
+NER_UPSTREAMS="${NER_UPSTREAMS:-127.0.0.1:8000}"
 
 # Порт балансировщика
 LB_PORT="${LB_PORT:-8080}"
