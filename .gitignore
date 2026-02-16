@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# venv / local envs
+.venv/
+venv/
+dp/
+dp311/
+
+# local caches / big archives not needed in repo
+hf_cache.tar.gz
+
+# local models dir (если у вас модели должны быть только в tar через LFS)
+models/
