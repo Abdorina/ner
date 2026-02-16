@@ -42,14 +42,13 @@ upstream ner_upstream {
 $(printf "${UPSTREAM_BLOCK}")
 }
 
-location = /nginx_health {
-    return 200 "nginx ok\n";
-}
-
 server {
     listen ${LB_PORT};
 
     client_max_body_size 5m;
+    location = /nginx_health {
+    return 200 "nginx ok\n";
+    }
 
     location / {
         proxy_pass http://ner_upstream;
