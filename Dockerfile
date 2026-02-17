@@ -1,7 +1,13 @@
 FROM python:3.11-slim
 WORKDIR /app
 
-RUN pip install --no-cache-dir -U pip && pip install --no-cache-dir \
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_PROGRESS_BAR=off \
+    MAKEFLAGS="-j1" \
+    MAX_JOBS=1
+
+RUN pip install \
   deeppavlov==1.7.0 \
   fastapi==0.89.1 \
   uvicorn==0.40.0 \
