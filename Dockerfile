@@ -3,8 +3,8 @@ FROM python:3.11-slim
 WORKDIR /app
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean \
- && rm -rf /var/cache/apt/archives /var/cache/apt/archives/partial \
- && mkdir -p /var/cache/apt/archives/partial \
+ && rm -rf /tmp/apt-archives \
+ && mkdir -p /tmp/apt-archives/partial \
  && apt-get -o Dir::Cache::Archives=/tmp/apt-archives update \
  && apt-get -o Dir::Cache::Archives=/tmp/apt-archives install -y --no-install-recommends \
     tar curl ca-certificates \
