@@ -1,13 +1,5 @@
 FROM python:3.11-slim
-
 WORKDIR /app
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        tar \
-        curl \
-        ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir -U pip && pip install --no-cache-dir \
   deeppavlov==1.7.0 \
@@ -25,14 +17,12 @@ RUN pip install --no-cache-dir -U pip && pip install --no-cache-dir \
 
 COPY app.py /app/app.py
 
-COPY deeppavlov_cache.tar.gz /tmp/
-COPY hf_rubert_only.tar.gz /tmp/
+# ADD распакует tar.gz автоматически
+ADD deeppavlov_cache.tar.gz /root/
+ADD hf_rubert_only.tar.gz /root/
 
 RUN mkdir -p /root/.cache /root/.deeppavlov /app/models \
- && tar -xzf /tmp/deeppavlov_cache.tar.gz -C /root \
- && tar -xzf /tmp/hf_rubert_only.tar.gz -C /root \
  && ln -s /root/.deeppavlov/models/ner_rus_bert_torch /app/models/ner_rus_bert_coll3_torch
 
 EXPOSE 8000
-
 CMD ["uvicorn","app:app","--host","0.0.0.0","--port","8000"]
