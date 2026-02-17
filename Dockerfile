@@ -33,4 +33,3 @@ RUN mkdir -p /root/.cache /root/.deeppavlov /app/models \
 EXPOSE 8000
 
 CMD ["uvicorn","app:app","--host","0.0.0.0","--port","8000"]
-EOF
