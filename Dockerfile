@@ -13,7 +13,7 @@ RUN pip install \
   fastapi==0.89.1 \
   uvicorn==0.18.3 \
   "pydantic<2" \
-  torch \
+  torch==2.1.2+cpu --index-url https://download.pytorch.org/whl/cpu \
   pytorch-crf \
   numpy==1.23.5 \
   tqdm==4.64.1 \
