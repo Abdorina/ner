@@ -48,8 +48,9 @@ def get_ner():
         _model_error = None
         return _ner
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         _model_error = f"{type(e).__name__}: {e}"
-        log.exception("Model load failed")
         raise
     finally:
         _model_loading = False

@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  ner:
+    build: .
+    container_name: ner
+    networks: [app_net]
+    # порт наружу не обязателен, т.к. ходим через nginx
+    # ports:
+    #   - "8000:8000"
+
+  nginx:
+    image: nginx:alpine
+    container_name: ner-nginx
+    depends_on:
+      - ner
+    ports:
+      - "8080:8080" # ВМ:8080 -> Nginx:8080
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks: [app_net]
+
+networks:
+  app_net:
+    driver: bridge
