@@ -1,4 +1,3 @@
-cat > build_run.sh <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -12,7 +11,6 @@ docker run -d --name "$NAME" -p ${PORT}:8000 "$IMAGE"
 
 echo "OK. Test:"
 echo "  curl -i http://127.0.0.1:${PORT}/health"
-EOF
 
 chmod +x build_run.sh
 ./build_run.sh
