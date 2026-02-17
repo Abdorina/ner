@@ -11,6 +11,3 @@ docker run -d --name "$NAME" -p ${PORT}:8000 "$IMAGE"
 
 echo "OK. Test:"
 echo "  curl -i http://127.0.0.1:${PORT}/health"
-
-chmod +x build_run.sh
-./build_run.sh
