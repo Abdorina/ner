@@ -2,11 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN apt-get update \ 
-    && apt-get install -y --no-install-recommends \
+RUN rm -f /etc/apt/apt.conf.d/docker-clean \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends \
     tar curl ca-certificates \
-    && apt-get clean \   
-    && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir -U pip && pip install --no-cache-dir \
   deeppavlov==1.7.0 \
